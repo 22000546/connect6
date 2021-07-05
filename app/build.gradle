@@ -26,5 +26,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'connect6.App'
+    mainClass = 'connect6.Main'
 }

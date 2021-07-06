@@ -6,11 +6,14 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import connect6.logic.Detecter;
 
 public class Board extends JPanel implements MouseListener, MouseMotionListener {
 	
@@ -37,7 +40,13 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	
 	private int userNum;
 	
+	/*
+	 * 
+	 */
+	private static ArrayList<Point> userLastPoint;
+	
 	PlayData data;
+	Counter counter;
 	Detecter detecter;
 	
 	public Board() {
@@ -50,7 +59,9 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		data = new PlayData();
-		detecter = new Detecter(data);
+		counter = new Counter(data);
+		detecter = new Detecter(counter);
+		userLastPoint = new ArrayList<>();
 				
 	}
 	
@@ -98,6 +109,8 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			stone.repaint();
 			count ++;
 			turnCount = 2;
+			userLastPoint.add(p);
+			userLastPoint.add(p);
 			data.insertStone(p.x/30-1, p.y/30-1, 1);
 			setComputerStone();
 			return;
@@ -115,7 +128,9 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	
 	public void setComputerStone() {
 		
-		ComputerTurn ct = new ComputerTurn();
+		detecter.setPoint();
+		
+		ComputerTurn ct = new ComputerTurn(detecter, count);
 		int[][] points = ct.getPoints();
 		
 		
@@ -136,21 +151,10 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			s.repaint();
 			data.insertStone(points[i][0], points[i][1], 3);
 			turnCount += 2;
-			
-			if(detecter.detectLeft(p.x/30-1, p.y/30-1) + detecter.detectRight(p.x/30-1, p.y/30-1) >= 5) {
-				JOptionPane.showMessageDialog(null, "게임 종료 1");
-				mode = END;
-			} else if(detecter.detectLeftTop(p.x/30-1, p.y/30-1) + detecter.detectRightBottom(p.x/30-1, p.y/30-1) >= 5) {
-				JOptionPane.showMessageDialog(null, "게임 종료 2");
-				mode = END;
-			} else if(detecter.detectCenterTop(p.x/30-1, p.y/30-1) + detecter.detectCenterBottom(p.x/30-1, p.y/30-1) >= 5) {
-				JOptionPane.showMessageDialog(null, "게임 종료 3");
-				mode = END;
-			} else if(detecter.detectRightTop(p.x/30-1, p.y/30-1) + detecter.detectLeftBottom(p.x/30-1, p.y/30-1) >= 5) {
-				JOptionPane.showMessageDialog(null, "게임 종료 4");
+			if(detecter.detectWinner(p)) {
 				mode = END;
 			}
-			
+			userLastPoint.clear();
 		}
 		
 	}
@@ -232,22 +236,13 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 					if(data.isEmpty(p.x/30-1, p.y/30-1)) {
 						data.insertStone(p.x/30-1, p.y/30-1, userTurn);
 						Stone stone = new Stone(p, userTurn);
+						userLastPoint.add(p);
 						add(stone);
 						stone.repaint();
 						count ++;
 						turnCount ++;
 						// 승패 판정 
-						if(detecter.detectLeft(p.x/30-1, p.y/30-1) + detecter.detectRight(p.x/30-1, p.y/30-1) >= 5) {
-							JOptionPane.showMessageDialog(null, "게임 종료 1");
-							mode = END;
-						} else if(detecter.detectLeftTop(p.x/30-1, p.y/30-1) + detecter.detectRightBottom(p.x/30-1, p.y/30-1) >= 5) {
-							JOptionPane.showMessageDialog(null, "게임 종료 2");
-							mode = END;
-						} else if(detecter.detectCenterTop(p.x/30-1, p.y/30-1) + detecter.detectCenterBottom(p.x/30-1, p.y/30-1) >= 5) {
-							JOptionPane.showMessageDialog(null, "게임 종료 3");
-							mode = END;
-						} else if(detecter.detectRightTop(p.x/30-1, p.y/30-1) + detecter.detectLeftBottom(p.x/30-1, p.y/30-1) >= 5) {
-							JOptionPane.showMessageDialog(null, "게임 종료 4");
+						if(detecter.detectWinner(p)) {
 							mode = END;
 						}
 						if(turnCount % 2 == 0) {
@@ -311,6 +306,10 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	
 	public int getTurn() {
 		return turn;
+	}
+	
+	public static Point getLastPoint(int index) {
+		return userLastPoint.get(index);
 	}
 
 }

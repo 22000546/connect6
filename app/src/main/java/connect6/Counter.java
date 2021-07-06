@@ -1,10 +1,10 @@
 package connect6;
 
-public class Detecter {
+public class Counter {
 	
 	private PlayData data;
 	
-	public Detecter(PlayData data) {
+	public Counter(PlayData data) {
 		this.data = data;
 	}
 	
@@ -46,10 +46,10 @@ public class Detecter {
 		int mode = data.getStone(x, y);
 		
 		try {
-			while(data.getStone(x+1, y+1) == mode) {
+			while(data.getStone(x+1, y-1) == mode) {
 				count ++;
 				x ++;
-				y ++;
+				y --;
 			}
 		} catch (Exception e) {
 			
@@ -138,6 +138,10 @@ public class Detecter {
 		}
 		
 		return count;
+	}
+	
+	public PlayData getData() {
+		return data;
 	}
 	
 }

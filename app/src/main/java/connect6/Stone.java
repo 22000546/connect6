@@ -10,17 +10,19 @@ public class Stone extends JPanel {
 	
 	private Point point;
 	private Color color;
+	private int turn;
 
-	public Stone(Point point, int mode) {
+	public Stone(Point point, int turn) {
 		
 		setBounds(0, 0, 600, 600);
 		setOpaque(false);
 		setLayout(null);
 		
 		this.point = point;
-		if(mode == 1) {
+		this.turn = turn;
+		if(turn == 1) {
 			color = Color.BLACK;
-		} else if(mode == 2) {
+		} else if(turn == 2) {
 			color = Color.WHITE;
 		} else {
 			color = Color.RED;
@@ -29,7 +31,6 @@ public class Stone extends JPanel {
 	}
 	
 	public void paintComponent(Graphics g) {
-				
 		g.setColor(color);
 		g.fillOval(point.x-10, point.y-10, 20, 20);
 		

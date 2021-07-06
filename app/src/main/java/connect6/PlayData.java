@@ -17,23 +17,27 @@ public class PlayData {
 		stones = new int[19][19];
 	}
 	
-	public boolean insertStone(int a, int b, int mode) {
-		
-		if(stones[b][a] == -1) {
+	public boolean isEmpty(int a, int b) {
+		if(stones[a][b] == 3) {
 			JOptionPane.showMessageDialog(null, "금지된 위치입니다.");
 			return false;
-		} else if(stones[b][a] != 0) {
+		} else if(stones[a][b] != 0) {
 			JOptionPane.showMessageDialog(null, "위치를 중복해서 선택할 수 없습니다.");
 			return false;
 		} else {
-			stones[b][a] = mode;
 			return true;
 		}
+	}
+		
+	public boolean insertStone(int a, int b, int turn) {
+		
+		stones[a][b] = turn;
+		return true;
 		
 	}
 	
 	public int getStone(int a, int b) {
-		return stones[b][a];
+		return stones[a][b];
 	}
 	
 }

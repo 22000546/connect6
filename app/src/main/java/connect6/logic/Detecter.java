@@ -1,6 +1,8 @@
 package connect6.logic;
 
 import java.awt.Point;
+import java.util.Random;
+
 import javax.swing.JOptionPane;
 
 import connect6.Board;
@@ -11,6 +13,7 @@ public class Detecter {
 	private Counter counter;
 	private Point p1;
 	private Point p2;
+	private int[][] points;
 	
 	public Detecter(Counter counter) {
 		this.counter = counter;
@@ -41,11 +44,50 @@ public class Detecter {
 	}
 	
 	public int[][] detectFiveStones() {
+				
+		Random random = new Random();
+		points = new int[2][2];
 		
-		int[][] points = FiveStonesDetecter.detectBothOpened(counter, p1);
-		int[][] points2 = FiveStonesDetecter.detectBothOpened(counter, p2);
+		FiveStonesDetecter first = new FiveStonesDetecter(counter, p1);
+		FiveStonesDetecter second = new FiveStonesDetecter(counter, p2);
 		
+		int firstStone = first.detectL5();
+		int secondStone = second.detectL5();
 		
+		if(firstStone == 2) {
+			points = first.getPoint();
+		} else if(secondStone == 2) {
+			points = second.getPoint();
+		} else if(Math.abs(firstStone) + Math.abs(secondStone) == 2 || Math.abs(firstStone) + Math.abs(secondStone) == 1) {
+			if(firstStone == -1) {
+				points[0][0] = first.getPointIndex(0, 0);
+				points[0][1] = first.getPointIndex(0, 1);
+			} else if(firstStone == 1) {
+				points[0][0] = first.getPointIndex(1, 0);
+				points[0][1] = first.getPointIndex(1, 1);
+			} else {
+				points[0][0] = random.nextInt(19);
+				points[0][1] = random.nextInt(19);
+			}
+			
+			if(secondStone == -1) {
+				points[1][0] = second.getPointIndex(0, 0);
+				points[1][1] = second.getPointIndex(0, 1);
+			} else if(secondStone == 1) {
+				points[1][0] = second.getPointIndex(1, 0);
+				points[1][1] = second.getPointIndex(1, 1);
+			} else {
+				points[1][0] = random.nextInt(19);
+				points[1][1] = random.nextInt(19);
+			}
+			
+		} else {
+			
+			points[0][0] = random.nextInt(19);
+			points[0][1] = random.nextInt(19);
+			points[1][0] = random.nextInt(19);
+			points[1][1] = random.nextInt(19);
+		}
 		
 		return points;
 	}

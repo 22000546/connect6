@@ -149,10 +149,11 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			*/
 			this.add(s);
 			s.repaint();
-			data.insertStone(points[i][0], points[i][1], 3);
+			data.insertStone(points[i][0], points[i][1], computerTurn);
 			turnCount += 2;
 			if(detecter.detectWinner(p)) {
 				mode = END;
+				return;
 			}
 			userLastPoint.clear();
 		}
@@ -244,6 +245,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 						// 승패 판정 
 						if(detecter.detectWinner(p)) {
 							mode = END;
+							return;
 						}
 						if(turnCount % 2 == 0) {
 							setComputerStone();

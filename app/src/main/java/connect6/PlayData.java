@@ -19,10 +19,10 @@ public class PlayData {
 	
 	public boolean isEmpty(int a, int b) {
 		if(stones[a][b] == 3) {
-			JOptionPane.showMessageDialog(null, "금지된 위치입니다.");
+			//JOptionPane.showMessageDialog(null, "금지된 위치입니다.");
 			return false;
 		} else if(stones[a][b] != 0) {
-			JOptionPane.showMessageDialog(null, "위치를 중복해서 선택할 수 없습니다.");
+			//JOptionPane.showMessageDialog(null, "위치를 중복해서 선택할 수 없습니다.");
 			return false;
 		} else {
 			return true;

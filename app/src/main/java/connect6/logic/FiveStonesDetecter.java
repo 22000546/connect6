@@ -12,18 +12,21 @@ import connect6.Counter;
 public class FiveStonesDetecter {
 
 	private int[][] points;
+	private Counter counter;
+	private Point p;
+	private int count = 0;
 	
 	
-	public FiveStonesDetecter() {
+	public FiveStonesDetecter(Counter counter, Point p) {
 		points = new int[2][2];
+		this.counter = counter;
+		this.p = p;
 	}
 	
 	
 	// CASE 1 : 0111110 / 0222220
-	public static int[][] detectBothOpened(Counter counter, Point p) {
-				
-		int[][] points = new int[2][2];
-		
+	public int detectL5() {
+						
 		//int userMode = counter.getData().getStone(p.x/30-1, p.y/30-1);
 		
 		if(counter.detectLeft(p.x/30-1, p.y/30-1) + counter.detectRight(p.x/30-1, p.y/30-1) >= 4) {
@@ -33,7 +36,13 @@ public class FiveStonesDetecter {
 			points[0][1] = p.y/30-1;
 			points[1][0] = p.x/30-1+cnt2+1;
 			points[1][1] = p.y/30-1;
-			return points;
+			if(counter.getData().isEmpty(points[0][0], points[0][1]) && counter.getData().isEmpty(points[1][0], points[1][1])) {
+				return 2;
+			} else if(counter.getData().isEmpty(points[0][0], points[0][1])) {
+				return -1;
+			} else if(counter.getData().isEmpty(points[1][0], points[1][1])) {
+				return 1;
+			}
 		} else if(counter.detectLeftTop(p.x/30-1, p.y/30-1) + counter.detectRightBottom(p.x/30-1, p.y/30-1) >= 4) {
 			int cnt1 = counter.detectLeftTop(p.x/30-1, p.y/30-1);
 			int cnt2 = counter.detectRightBottom(p.x/30-1, p.y/30-1);
@@ -41,7 +50,13 @@ public class FiveStonesDetecter {
 			points[0][1] = p.y/30-1-cnt1-1;
 			points[1][0] = p.x/30-1+cnt2+1;
 			points[1][1] = p.y/30-1+cnt2+1;
-			return points;
+			if(counter.getData().isEmpty(points[0][0], points[0][1]) && counter.getData().isEmpty(points[1][0], points[1][1])) {
+				return 2;
+			} else if(counter.getData().isEmpty(points[0][0], points[0][1])) {
+				return -1;
+			} else if(counter.getData().isEmpty(points[1][0], points[1][1])) {
+				return 1;
+			}
 		} else if(counter.detectCenterTop(p.x/30-1, p.y/30-1) + counter.detectCenterBottom(p.x/30-1, p.y/30-1) >= 4) {
 			int cnt1 = counter.detectCenterTop(p.x/30-1, p.y/30-1);
 			int cnt2 = counter.detectCenterBottom(p.x/30-1, p.y/30-1);
@@ -49,7 +64,13 @@ public class FiveStonesDetecter {
 			points[0][1] = p.y/30-1-cnt1-1;
 			points[1][0] = p.x/30-1;
 			points[1][1] = p.y/30-1+cnt2+1;
-			return points;
+			if(counter.getData().isEmpty(points[0][0], points[0][1]) && counter.getData().isEmpty(points[1][0], points[1][1])) {
+				return 2;
+			} else if(counter.getData().isEmpty(points[0][0], points[0][1])) {
+				return -1;
+			} else if(counter.getData().isEmpty(points[1][0], points[1][1])) {
+				return 1;
+			}
 		} else if(counter.detectRightTop(p.x/30-1, p.y/30-1) + counter.detectLeftBottom(p.x/30-1, p.y/30-1) >= 4) {
 			int cnt1 = counter.detectRightTop(p.x/30-1, p.y/30-1);
 			int cnt2 = counter.detectLeftBottom(p.x/30-1, p.y/30-1);
@@ -57,23 +78,25 @@ public class FiveStonesDetecter {
 			points[0][1] = p.y/30-1-cnt1-1;
 			points[1][0] = p.x/30-1-cnt2-1;
 			points[1][1] = p.y/30-1+cnt2+1;
-			return points;
+			if(counter.getData().isEmpty(points[0][0], points[0][1]) && counter.getData().isEmpty(points[1][0], points[1][1])) {
+				return 2;
+			} else if(counter.getData().isEmpty(points[0][0], points[0][1])) {
+				return -1;
+			} else if(counter.getData().isEmpty(points[1][0], points[1][1])) {
+				return 1;
+			}
 		}
 		
-		Random random = new Random();
-		
-		points[0][0] = random.nextInt(19);
-		points[0][1] = random.nextInt(19);
-		points[1][0] = random.nextInt(19);
-		points[1][1] = random.nextInt(19);
-		
-		
-		return points;
+		return 0;
 		
 	}
 	
 	public int[][] getPoint() {
 		return points;
+	}
+	
+	public int getPointIndex(int a, int b) {
+		return points[a][b];
 	}
 	
 	

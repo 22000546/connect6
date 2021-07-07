@@ -11,25 +11,10 @@ public class ComputerTurn {
 	
 	private static int[][] points;
 	private Detecter detecter;
-	private static HashMap<Integer, Integer> secondStones;
 
 	public ComputerTurn(Detecter detecter, int count) {
 		
 		this.detecter = detecter;
-		/*
-		
-		for(int i = 0 ; i < 8; i ++) {
-			secondStones.put(i, i+1);
-		}
-		secondStones.put(8, 1);
-		
-		Random random = new Random();
-		int index = random.nextInt(8);
-		int first = secondStones.get(index);
-		if(first == 1) {
-			//points[0][0] = Point(8, 8);
-			
-		}*/
 		
 		setPoints(count);
 		
@@ -43,7 +28,13 @@ public class ComputerTurn {
 			
 		points = new int[2][2];
 		
-		points = detecter.detectFiveStones();
+		points = detecter.detectAll();
+		
+		System.out.print(points[0][0] + " ");
+		System.out.println(points[0][1]);
+		System.out.print(points[1][0] + " ");
+		System.out.println(points[1][1]);
+		System.out.println();
 		
 	}
 	

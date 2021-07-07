@@ -14,6 +14,7 @@ public class Detecter {
 	private Point p1;
 	private Point p2;
 	private int[][] points;
+	private int count = 0;
 	
 	public Detecter(Counter counter) {
 		this.counter = counter;
@@ -27,20 +28,102 @@ public class Detecter {
 	
 	
 	public boolean detectWinner(Point p) {
-		if(counter.detectLeft(p.x/30-1, p.y/30-1) + counter.detectRight(p.x/30-1, p.y/30-1) >= 5) {
+		if(counter.detectLeft(p.x/30-1, p.y/30-1) + counter.detectRight(p.x/30-1, p.y/30-1) == 5) {
 			JOptionPane.showMessageDialog(null, "게임 종료 1");
 			return true;
-		} else if(counter.detectLeftTop(p.x/30-1, p.y/30-1) + counter.detectRightBottom(p.x/30-1, p.y/30-1) >= 5) {
+		} else if(counter.detectLeftTop(p.x/30-1, p.y/30-1) + counter.detectRightBottom(p.x/30-1, p.y/30-1) == 5) {
 			JOptionPane.showMessageDialog(null, "게임 종료 2");
 			return true;
-		} else if(counter.detectCenterTop(p.x/30-1, p.y/30-1) + counter.detectCenterBottom(p.x/30-1, p.y/30-1) >= 5) {
+		} else if(counter.detectCenterTop(p.x/30-1, p.y/30-1) + counter.detectCenterBottom(p.x/30-1, p.y/30-1) == 5) {
 			JOptionPane.showMessageDialog(null, "게임 종료 3");
 			return true;
-		} else if(counter.detectRightTop(p.x/30-1, p.y/30-1) + counter.detectLeftBottom(p.x/30-1, p.y/30-1) >= 5) {
+		} else if(counter.detectRightTop(p.x/30-1, p.y/30-1) + counter.detectLeftBottom(p.x/30-1, p.y/30-1) == 5) {
 			JOptionPane.showMessageDialog(null, "게임 종료 4");
 			return true;
 		}
 		return false;
+	}
+	
+	public int[][] detectAll() {
+		
+		DoubleThreatDetecter single1 = new DoubleThreatDetecter(counter, p1);
+		DoubleThreatDetecter single2 = new DoubleThreatDetecter(counter, p2);
+		
+		Random random = new Random();
+		
+		points = new int[2][2];
+		
+		while(count < 2) {
+			
+			count += single1.isBothOpened(5);
+			if(count == 2) {
+				points = single1.getPoint();
+				count = 0;
+				break;
+			}
+			
+			count += single2.isBothOpened(5);
+			if(count == 2) {
+				points = single2.getPoint();
+				count = 0;
+				break;
+			}
+			
+			count += single1.isBothOpened(4);
+			if(count == 2) {
+				points = single1.getPoint();
+				count = 0;
+				break;
+			}
+			
+			count += single2.isBothOpened(4);
+			if(count == 2) {
+				points = single2.getPoint();
+				count = 0;
+				break;
+			}
+			
+			count += single1.isBothOpened(3);
+			if(count == 2) {
+				points = single1.getPoint();
+				count = 0;
+				break;
+			}
+			
+			count += single2.isBothOpened(3);
+			if(count == 2) {
+				points = single2.getPoint();
+				count = 0;
+				break;
+			}
+			
+			count += single1.isBothOpened(2);
+			if(count == 2) {
+				points = single1.getPoint();
+				count = 0;
+				break;
+			}
+			
+			count += single2.isBothOpened(2);
+			if(count == 2) {
+				points = single2.getPoint();
+				count = 0;
+				break;
+			}
+			
+			if(count == 0) {
+				points[0][0] = random.nextInt(19);
+				points[0][1] = random.nextInt(19);
+				points[1][0] = random.nextInt(19);
+				points[1][1] = random.nextInt(19);
+				break;
+			}
+			
+			
+		}
+		
+		return points;
+		
 	}
 	
 	public int[][] detectFiveStones() {
@@ -50,6 +133,51 @@ public class Detecter {
 		
 		FiveStonesDetecter first = new FiveStonesDetecter(counter, p1);
 		FiveStonesDetecter second = new FiveStonesDetecter(counter, p2);
+		
+		int firstStone = first.detectL5();
+		int secondStone = second.detectL5();
+		
+		if(firstStone == 2) {
+			points = first.getPoint();
+		} else if(secondStone == 2) {
+			points = second.getPoint();
+		} else if(Math.abs(firstStone) + Math.abs(secondStone) == 2 || Math.abs(firstStone) + Math.abs(secondStone) == 1) {
+			if(firstStone == -1) {
+				points[0] = first.getPointIndex(0);
+			} else if(firstStone == 1) {
+				points[0] = first.getPointIndex(1);
+			} else {
+				points[0][0] = random.nextInt(19);
+				points[0][1] = random.nextInt(19);
+			}
+			
+			if(secondStone == -1) {
+				points[1] = second.getPointIndex(0);
+			} else if(secondStone == 1) {
+				points[1] = second.getPointIndex(1);
+			} else {
+				points[1][0] = random.nextInt(19);
+				points[1][1] = random.nextInt(19);
+			}
+			
+		} else {
+			
+			points[0][0] = random.nextInt(19);
+			points[0][1] = random.nextInt(19);
+			points[1][0] = random.nextInt(19);
+			points[1][1] = random.nextInt(19);
+		}
+		
+		return points;
+	}
+	
+	public int[][] detectFourStones() {
+		
+		Random random = new Random();
+		points = new int[2][2];
+		
+		FourStonesDetecter first = new FourStonesDetecter(counter, p1);
+		FourStonesDetecter second = new FourStonesDetecter(counter, p2);
 		
 		int firstStone = first.detectL5();
 		int secondStone = second.detectL5();

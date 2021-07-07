@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -85,6 +86,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 				}
 				mode = PLAY;
 				turn = 1;
+				setFirst();
 			}
 		} else if(forbiddenMode == 2) {
 			String input = JOptionPane.showInputDialog("원하는 갯수를 입력해주세요. (0-5)");
@@ -133,6 +135,30 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 		ComputerTurn ct = new ComputerTurn(detecter, count);
 		int[][] points = ct.getPoints();
 		
+		if(count == 1 && computerTurn == 2) {
+			Random random = new Random();
+			while(true) {
+				int x1 = random.nextInt(3) + 8;
+				int y1 = random.nextInt(3) + 8;
+				int x2 = random.nextInt(3) + 8;
+				int y2 = random.nextInt(3) + 8;
+				if(x1 == x2 && y1 == y2) {
+					continue;
+				}
+				Point p1 = new Point(x1, y1);
+				Point p2 = new Point(x2, y2);
+				if(data.isEmpty(x1, y1) && data.isEmpty(x2, y2)) {
+					if(p1.distance(p2) <= Math.sqrt(2)) {
+						points[0][0] = x1;
+						points[0][1] = y1;
+						points[1][0] = x2;
+						points[1][1] = y2;
+						break;
+					}
+				}
+			}
+			
+		}
 		
 		for(int i = 0; i < 2; i ++) {
 			
@@ -142,7 +168,6 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 			p.y = (points[i][1] + 1) * 30;
 
 			Stone s = new Stone(p, computerTurn);
-			s = new Stone(p, computerTurn);
 			/*
 			setColor(Color.GREEN);
 			drawOval(p.x-11, p.y-11, 22, 22);
@@ -225,6 +250,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 				if(forbiddenCount == userNum) {
 					turn = 1;
 					mode = PLAY;
+					setFirst();
 				}
 			}
 		} else if(mode == PLAY) {

@@ -78,7 +78,6 @@ public class MainFrame extends JFrame {
 					forbidden.setForeground(Color.DARK_GRAY);
 					board.setForbidden(1);
 					mode.setText("게임 시작");
-					board.setFirst();
 				} else {
 					JOptionPane.showMessageDialog(null, "이미 설정하셨습니다.");
 				}
@@ -95,7 +94,6 @@ public class MainFrame extends JFrame {
 					set.setForeground(Color.DARK_GRAY);
 					board.setForbidden(2);
 					mode.setText("게임 시작");
-					board.setFirst();
 				} else {
 					JOptionPane.showMessageDialog(null, "이미 설정하셨습니다.");
 				}

@@ -20,6 +20,10 @@ public class Forbidden extends JPanel {
 		
 			points[i][0] = random.nextInt(19);
 			points[i][1] = random.nextInt(19);
+			while(points[i][0] == 9 && points[i][1] == 9) {
+				points[i][0] = random.nextInt(19);
+				points[i][1] = random.nextInt(19);
+			}
 			
 		}
 		
